@@ -9,6 +9,7 @@ export default function AmisPage() {
   const [message, setMessage] = useState('')
   const [pending, setPending] = useState<any[]>([])
   const [friends, setFriends] = useState<any[]>([])
+  const [activity, setActivity] = useState<any[]>([])
 
   useEffect(() => {
     async function load() {
@@ -62,6 +63,24 @@ export default function AmisPage() {
       .in('id', friendIds.length ? friendIds : ['00000000-0000-0000-0000-000000000000'])
 
     setFriends(friendProfiles || [])
+
+    if (friendIds.length > 0) {
+      const { data: ratings } = await supabase
+        .from('ratings')
+        .select('id, user_id, rating, comment, created_at, matches(home_team, away_team, match_date, league)')
+        .in('user_id', friendIds)
+        .order('created_at', { ascending: false })
+        .limit(20)
+
+      setActivity(
+        (ratings || []).map((r: any) => ({
+          ...r,
+          email: friendProfiles?.find((p) => p.id === r.user_id)?.email,
+        }))
+      )
+    } else {
+      setActivity([])
+    }
   }
 
   async function sendRequest() {
@@ -153,6 +172,25 @@ export default function AmisPage() {
           <div className="space-y-2">
             {friends.map((f) => (
               <div key={f.id} className="border rounded p-3">{f.email}</div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div>
+        <h2 className="font-semibold mb-2">Activité de tes amis</h2>
+        {activity.length === 0 ? (
+          <p className="text-sm text-gray-500">Aucun de tes amis n'a encore noté de match.</p>
+        ) : (
+          <div className="space-y-2">
+            {activity.map((a) => (
+              <div key={a.id} className="border rounded p-3">
+                <div className="text-sm text-gray-500">{a.email}</div>
+                <div className="font-medium">
+                  {a.matches.home_team} vs {a.matches.away_team}
+                </div>
+                <div className="text-yellow-500">{'★'.repeat(a.rating)}{'☆'.repeat(5 - a.rating)}</div>
+              </div>
             ))}
           </div>
         )}
