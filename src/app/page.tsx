@@ -7,11 +7,13 @@ export default async function HomePage() {
     .select('*')
     .order('match_date', { ascending: true })
 
-  if (error) return <div className="p-8">Erreur : {error.message}</div>
+  if (error) return <div className="max-w-2xl mx-auto px-4 py-8">Erreur : {error.message}</div>
 
   return (
-    <div className="max-w-2xl mx-auto p-8">
-      <h1 className="text-2xl font-bold mb-6">Kickwatch</h1>
+    <div className="max-w-2xl mx-auto px-4 py-8">
+      <h1 className="font-[family-name:var(--font-oswald)] uppercase tracking-wide text-2xl font-semibold mb-6">
+        Matchday
+      </h1>
       <MatchesList matches={matches || []} />
     </div>
   )

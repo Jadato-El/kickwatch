@@ -41,8 +41,15 @@ export default function WatchlistButton({ matchId }: { matchId: string }) {
   if (loading) return null
 
   return (
-    <button onClick={toggle} className="text-sm px-3 py-1 rounded border">
-      {inWatchlist ? '✓ Dans ma watchlist' : '+ Ajouter à ma watchlist'}
+    <button
+      onClick={toggle}
+      className={`text-xs uppercase tracking-wide font-[family-name:var(--font-oswald)] px-3 py-1.5 rounded-full border transition-colors ${
+        inWatchlist
+          ? 'bg-[#f5a623] border-[#f5a623] text-[#0d1f17] font-semibold'
+          : 'border-[#f0ede4]/25 text-[#f0ede4]/70 hover:border-[#f5a623] hover:text-[#f5a623]'
+      }`}
+    >
+      {inWatchlist ? '★ Dans ma watchlist' : '+ Watchlist'}
     </button>
   )
 }

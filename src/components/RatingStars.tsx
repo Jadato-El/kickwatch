@@ -39,12 +39,14 @@ export default function RatingStars({ matchId }: { matchId: string }) {
   if (loading) return null
 
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-0.5">
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
           onClick={() => rate(star)}
-          className={`text-lg ${rating && star <= rating ? 'text-yellow-500' : 'text-gray-300'}`}
+          className={`text-base leading-none transition-colors ${
+            rating && star <= rating ? 'text-[#4e9a6b]' : 'text-[#f0ede4]/20 hover:text-[#4e9a6b]/60'
+          }`}
         >
           ★
         </button>

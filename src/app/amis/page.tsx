@@ -120,41 +120,55 @@ export default function AmisPage() {
     if (userId) loadRequests(userId)
   }
 
-  if (!userId) return <div className="p-8">Connecte-toi pour voir tes amis.</div>
+  const inputClass =
+    'flex-1 bg-[#14291f] border border-[#f0ede4]/15 rounded px-3 py-2 text-sm placeholder:text-[#7c9188] focus:outline-none focus:border-[#f5a623] transition-colors'
+  const sectionTitle = 'font-[family-name:var(--font-oswald)] uppercase tracking-wide text-sm text-[#7c9188] mb-3'
+  const card = 'bg-[#14291f] border-l-2 border-[#f0ede4]/10 rounded-r p-3'
+
+  if (!userId) return <div className="max-w-2xl mx-auto px-4 py-8">Connecte-toi pour voir tes amis.</div>
 
   return (
-    <div className="max-w-2xl mx-auto p-8 space-y-8">
-      <h1 className="text-2xl font-bold">Amis</h1>
+    <div className="max-w-2xl mx-auto px-4 py-8 space-y-10">
+      <h1 className="font-[family-name:var(--font-oswald)] uppercase tracking-wide text-2xl font-semibold">Amis</h1>
 
       <div>
-        <h2 className="font-semibold mb-2">Ajouter un ami</h2>
+        <h2 className={sectionTitle}>Ajouter un ami</h2>
         <div className="flex gap-2">
           <input
             type="email"
             placeholder="Email de ton ami"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 border rounded p-2"
+            className={inputClass}
           />
-          <button onClick={sendRequest} className="bg-black text-white rounded px-4">
+          <button
+            onClick={sendRequest}
+            className="bg-[#f5a623] text-[#0d1f17] font-medium rounded px-4 text-sm hover:bg-[#f5a623]/90 transition-colors"
+          >
             Envoyer
           </button>
         </div>
-        {message && <p className="text-sm mt-2">{message}</p>}
+        {message && <p className="text-sm mt-2 text-[#7c9188]">{message}</p>}
       </div>
 
       {pending.length > 0 && (
         <div>
-          <h2 className="font-semibold mb-2">Demandes reçues</h2>
+          <h2 className={sectionTitle}>Demandes reçues</h2>
           <div className="space-y-2">
             {pending.map((req) => (
-              <div key={req.id} className="flex justify-between items-center border rounded p-3">
-                <span>{req.email}</span>
+              <div key={req.id} className={`${card} flex justify-between items-center`}>
+                <span className="text-sm">{req.email}</span>
                 <div className="flex gap-2">
-                  <button onClick={() => respond(req.id, true)} className="text-sm bg-black text-white rounded px-3 py-1">
+                  <button
+                    onClick={() => respond(req.id, true)}
+                    className="text-xs uppercase tracking-wide bg-[#f5a623] text-[#0d1f17] font-medium rounded-full px-3 py-1"
+                  >
                     Accepter
                   </button>
-                  <button onClick={() => respond(req.id, false)} className="text-sm border rounded px-3 py-1">
+                  <button
+                    onClick={() => respond(req.id, false)}
+                    className="text-xs uppercase tracking-wide border border-[#f0ede4]/25 text-[#f0ede4]/70 rounded-full px-3 py-1 hover:border-[#f5a623] hover:text-[#f5a623]"
+                  >
                     Refuser
                   </button>
                 </div>
@@ -165,31 +179,34 @@ export default function AmisPage() {
       )}
 
       <div>
-        <h2 className="font-semibold mb-2">Tes amis</h2>
+        <h2 className={sectionTitle}>Tes amis</h2>
         {friends.length === 0 ? (
-          <p className="text-sm text-gray-500">Pas encore d'amis.</p>
+          <p className="text-sm text-[#7c9188]">Pas encore d'amis.</p>
         ) : (
           <div className="space-y-2">
             {friends.map((f) => (
-              <div key={f.id} className="border rounded p-3">{f.email}</div>
+              <div key={f.id} className={`${card} text-sm`}>{f.email}</div>
             ))}
           </div>
         )}
       </div>
 
       <div>
-        <h2 className="font-semibold mb-2">Activité de tes amis</h2>
+        <h2 className={sectionTitle}>Activité de tes amis</h2>
         {activity.length === 0 ? (
-          <p className="text-sm text-gray-500">Aucun de tes amis n'a encore noté de match.</p>
+          <p className="text-sm text-[#7c9188]">Aucun de tes amis n'a encore noté de match.</p>
         ) : (
           <div className="space-y-2">
             {activity.map((a) => (
-              <div key={a.id} className="border rounded p-3">
-                <div className="text-sm text-gray-500">{a.email}</div>
-                <div className="font-medium">
-                  {a.matches.home_team} vs {a.matches.away_team}
+              <div key={a.id} className={card}>
+                <div className="text-xs text-[#7c9188] mb-1">{a.email}</div>
+                <div className="font-[family-name:var(--font-oswald)] font-medium text-[15px]">
+                  {a.matches.home_team} <span className="text-[#7c9188]">vs</span> {a.matches.away_team}
                 </div>
-                <div className="text-yellow-500">{'★'.repeat(a.rating)}{'☆'.repeat(5 - a.rating)}</div>
+                <div className="text-[#4e9a6b] mt-1">
+                  {'★'.repeat(a.rating)}
+                  <span className="text-[#f0ede4]/15">{'★'.repeat(5 - a.rating)}</span>
+                </div>
               </div>
             ))}
           </div>
