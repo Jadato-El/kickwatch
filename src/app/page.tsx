@@ -1,6 +1,8 @@
 import { supabase } from '@/lib/supabase'
 import MatchesList from '@/components/MatchesList'
 
+export const dynamic = 'force-dynamic'
+
 export default async function HomePage() {
   const { data: matches, error } = await supabase
     .from('matches')
